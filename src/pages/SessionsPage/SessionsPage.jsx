@@ -18,24 +18,23 @@ export default function SessionsPage() {
     );
 
     promise.then((res) => {
-      setCards(res.data);
+      setCards(res.data.days)
     });
   }, []);
-
-  console.log(cardDay);
 
     return (
 
         <PageContainer>
             Selecione o horário
-
-            {cardDay.map((card) => (
-                <Link to={`/assentos/${card.id}`} key={card.id}>
-                    <div>
-                        <Sessions idDay={card.posterURL} />
-                    </div>
-                </Link>
-            ))}
+            <div>
+            {cardDay ? cardDay.map((card) => (
+            <Link to={`/assentos/${card.id}`} key={card.id}>
+            
+            <Sessions cardDay={cardDay} />
+            
+            </Link>
+            )) : null}
+            </div>
         </PageContainer>    
 
         /** 
@@ -93,26 +92,6 @@ const PageContainer = styled.div`
     padding-top: 70px;
     div {
         margin-top: 20px;
-    }
-`
-const SessionContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    font-family: 'Roboto';
-    font-size: 20px;
-    color: #293845;
-    padding: 0 20px;
-`
-const ButtonsContainer = styled.div`
-    display: flex;
-    flex-direction: row;
-    margin: 20px 0;
-    button {
-        margin-right: 20px;
-    }
-    a {
-        text-decoration: none;
     }
 `
 const FooterContainer = styled.div`
