@@ -15,8 +15,11 @@ export default function BackButton() {
 
 const Btn = styled.button`
     display: flex;
-    left: 20px;
+    left: 10px;
     background: transparent;
     color: Black;
+    .icon {
+        font-size: 50px;
+        }
 `;
 

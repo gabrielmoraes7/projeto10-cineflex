@@ -37,10 +37,11 @@ export default function Seat(props) {
                 setSelected(selected => [...selected, seat])
             }
             //verifica se está selecionado
-            if (color == "#1AAE9E") {
+            if (color == "#1AAE9E" && confirm("Gostaria de remover o assento e apagar os dados?")) {
                 setBorder("blue")
                 setColor("lightblue")
                 setSelected(selected => selected.filter(selected => selected.id !== seat.id));
+                
             }
         }
     }
