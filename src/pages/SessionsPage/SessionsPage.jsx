@@ -27,13 +27,12 @@ export default function SessionsPage() {
         <PageContainer>
             Selecione o horário
             <div>
-            {cardDay ? cardDay.map((card) => (
-            <Link to={`/assentos/${card.id}`} key={card.id}>
-            
-            <Sessions cardDay={cardDay} />
-            
-            </Link>
-            )) : null}
+            {
+            cardDay 
+            ? 
+            <Sessions cardDay={cardDay} />  
+            : null
+            }
             </div>
         </PageContainer>    
 
