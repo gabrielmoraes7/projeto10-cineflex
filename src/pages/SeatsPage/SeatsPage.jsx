@@ -1,51 +1,98 @@
-import styled from "styled-components"
+import { useState, useEffect } from "react";
+import styled from "styled-components";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import Seat from "./Seat";
+import { Link } from "react-router-dom";
+
 
 export default function SeatsPage() {
+    const { idSessao } = useParams()
+    const [movieInfo, setMovieInfo] = useState([])
+    const [sessionInfo, setSessionInfo] = useState([])
+    const [seats, setSeats]  = useState([])
+    const [selected, setSelected] = useState([])
+    
+    console.log(idSessao);
+    useEffect(() => {
+        axios.defaults.headers.common["Authorization"] = "Bih7oJ1on6MJflYVuhZlVsqI";
+        const promise = axios.get(
+          `https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${idSessao}/seats`
+        );
+    
+        promise.then((res) => {
+            setMovieInfo(res.data.movie)
+            setSeats(res.data.seats)
+            setSessionInfo(res.data.day)
+        });
+      }, []);
 
+      function handleSubmit(event) {
+        event.preventDefault();
+        const name = event.target[0].value;
+        const cpf = event.target[1].value;
+        const ids = selected.map(seat => seat.id);
+        axios.post('https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many', {
+          ids,
+          name,
+          cpf
+        });
+      }
+      
     return (
         <PageContainer>
             Selecione o(s) assento(s)
 
             <SeatsContainer>
-                <SeatItem>01</SeatItem>
-                <SeatItem>02</SeatItem>
-                <SeatItem>03</SeatItem>
-                <SeatItem>04</SeatItem>
-                <SeatItem>05</SeatItem>
+
+                {seats 
+                ? 
+                    seats.map((seat) => (
+                        <Seat   seat={seat} 
+                                selected={selected}
+                                setSelected={setSelected}/>
+                    )
+                    )
+                : null }
             </SeatsContainer>
 
             <CaptionContainer>
                 <CaptionItem>
-                    <CaptionCircle />
+                    <CaptionCircle color="#1AAE9E" border="#0E7D71"/>
                     Selecionado
                 </CaptionItem>
                 <CaptionItem>
-                    <CaptionCircle />
+                    <CaptionCircle color="lightblue" border="blue"/>
                     Disponível
                 </CaptionItem>
                 <CaptionItem>
-                    <CaptionCircle />
+                    <CaptionCircle color="#FBE192" border="#F7C52B"/>
                     Indisponível
                 </CaptionItem>
             </CaptionContainer>
 
-            <FormContainer>
-                Nome do Comprador:
-                <input placeholder="Digite seu nome..." />
+            <FormContainer onSubmit={handleSubmit}>
+                <form>
+                    Nome do Comprador:
+                    <input placeholder="Digite seu nome..." />
 
-                CPF do Comprador:
-                <input placeholder="Digite seu CPF..." />
-
-                <button>Reservar Assento(s)</button>
+                    CPF do Comprador:
+                    <input placeholder="Digite seu CPF..." />
+                    
+                    <Link to={`/sucesso`} >
+                        <button type="submit">Reservar Assento(s)</button>
+                    </Link>    
+                </form>
             </FormContainer>
+
 
             <FooterContainer>
                 <div>
-                    <img src={"https://br.web.img2.acsta.net/pictures/22/05/16/17/59/5165498.jpg"} alt="poster" />
+                    <img src={movieInfo.posterURL} alt="poster" />
                 </div>
                 <div>
-                    <p>Tudo em todo lugar ao mesmo tempo</p>
-                    <p>Sexta - 14h00</p>
+                    <p>{movieInfo.title}</p>
+                    <p>{sessionInfo.weekday} - {sessionInfo.date}</p>
                 </div>
             </FooterContainer>
 
@@ -96,8 +143,8 @@ const CaptionContainer = styled.div`
     margin: 20px;
 `
 const CaptionCircle = styled.div`
-    border: 1px solid blue;         // Essa cor deve mudar
-    background-color: lightblue;    // Essa cor deve mudar
+    border: 1px solid ${props => props.border};         // Essa cor deve mudar
+    background-color: ${props => props.color};    // Essa cor deve mudar
     height: 25px;
     width: 25px;
     border-radius: 25px;

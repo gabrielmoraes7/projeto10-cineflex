@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Sessions from "./Sessions";
@@ -9,8 +8,8 @@ export default function SessionsPage() {
     const { idFilme } = useParams();
     const film = idFilme;
     const [cardDay, setCards] = useState(film.days);
+    const [infoMovie, setInfoMovie] = useState();
 
-    console.log(idFilme);
   useEffect(() => {
     axios.defaults.headers.common["Authorization"] = "Bih7oJ1on6MJflYVuhZlVsqI";
     const promise = axios.get(
@@ -19,6 +18,7 @@ export default function SessionsPage() {
 
     promise.then((res) => {
       setCards(res.data.days)
+      setInfoMovie(res)
     });
   }, []);
 
@@ -34,6 +34,26 @@ export default function SessionsPage() {
             : null
             }
             </div>
+
+            <FooterContainer>
+                <>                
+                {
+                    infoMovie 
+                    ?  
+                    <>
+                        <div>
+                            <img src={infoMovie.data.posterURL} alt="poster" />
+                        </div>
+                        <div>
+                            <p>{infoMovie.data.title}</p>
+                        </div>
+                    </>
+                    : null
+
+                }
+                </>
+                
+            </FooterContainer>
         </PageContainer>    
 
         /** 
