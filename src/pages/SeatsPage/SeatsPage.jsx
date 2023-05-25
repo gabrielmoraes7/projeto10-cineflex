@@ -157,7 +157,7 @@
                   }
                     
                     <Link to={`/sucesso`} >
-                    <button type="submit">Reservar Assento(s)</button>
+                    <button type="submit" data-test="book-seat-btn">Reservar Assento(s)</button>
                     </Link> 
                 </form>
                 </FormContainer>
