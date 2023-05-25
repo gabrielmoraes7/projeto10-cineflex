@@ -9,7 +9,7 @@ export default function BackButton() {
     return null;
   }
   return (
-    <Btn><ion-icon name="arrow-back-outline" onClick={() => navigate(-1)}></ion-icon></Btn>
+    <Btn data-test="go-home-header-btn"><ion-icon name="arrow-back-outline" onClick={() => navigate(-1)}></ion-icon></Btn>
   );
 }
 

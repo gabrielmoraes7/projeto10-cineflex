@@ -13,7 +13,23 @@
         const [seats, setSeats]  = useState([])
         const [selected, setSelected] = useState([])
         const [compradores, setCompradores] = useState([]);
+        const [darkMode, setDarkMode] = useState(() => {
+            return JSON.parse(localStorage.getItem('darkMode')) || false;
+          });
+          console.log("Dark mode em:", darkMode)
+          useEffect(() => {
+            const handleStorageChange = () => {
+              const darkModeValue = JSON.parse(localStorage.getItem('darkMode')) || false;
+              setDarkMode(darkModeValue);
+            };
         
+            window.addEventListener('storage', handleStorageChange);
+            return () => {
+                window.removeEventListener('storage', handleStorageChange);
+              };
+            }, []);
+        
+          
         console.log(idSessao);
         useEffect(() => {
             axios.defaults.headers.common["Authorization"] = "Bih7oJ1on6MJflYVuhZlVsqI";
@@ -56,7 +72,7 @@
         }, [selected]);
         
         return (
-            <PageContainer>
+            <PageContainer darkMode={darkMode}>
                 Selecione o(s) assento(s)
 
                 <SeatsContainer>
@@ -72,7 +88,7 @@
                     : null }
                 </SeatsContainer>
 
-                <CaptionContainer>
+                <CaptionContainer darkMode={darkMode}>
                     <CaptionItem>
                         <CaptionCircle color="#1AAE9E" border="#0E7D71"/>
                         Selecionado
@@ -87,7 +103,7 @@
                     </CaptionItem>
                 </CaptionContainer>
 
-                <FormContainer onSubmit={handleSubmit}>
+                <FormContainer onSubmit={handleSubmit} >
                 <form>
                     {
                     compradores.length < 2
@@ -99,6 +115,7 @@
                             placeholder="Digite seu nome..." 
                             value={compradores.nome || ''}
                             onChange={event => handleInputChange(event, index)}
+                            data-test="client-name"
                         />
 
                         <p>CPF do Comprador:</p>
@@ -107,6 +124,7 @@
                             placeholder="Digite seu CPF..." 
                             value={compradores.cpf || ''}
                             onChange={event => handleInputChange(event, index)}
+                            data-test="client-cpf"
                         />
                     </>
                     :
@@ -141,7 +159,7 @@
                 </FormContainer>
 
 
-                <FooterContainer>
+                <FooterContainer darkMode={darkMode} data-test="footer">
                     <div>
                         <img src={movieInfo.posterURL} alt="poster" />
                     </div>
@@ -162,7 +180,7 @@
         font-family: 'Roboto';
         font-size: 24px;
         text-align: center;
-        color: #293845;
+        color: ${props => props.darkMode ? '#000000' : '#293845'};
         margin-top: 30px;
         padding-bottom: 120px;
         padding-top: 70px;
@@ -230,7 +248,7 @@
     const FooterContainer = styled.div`
         width: 100%;
         height: 120px;
-        background-color: #C3CFD9;
+        background-color: ${props => props.darkMode ? '#212121' : '#C3CFD9'};
         display: flex;
         flex-direction: row;
         align-items: center;

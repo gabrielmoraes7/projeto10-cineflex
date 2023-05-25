@@ -56,7 +56,7 @@ export default function Seat(props) {
     }
 
     return (
-        <SeatItem color={color} border={border} onClick={() =>handleClick(seat)}>
+        <SeatItem color={color} border={border} onClick={() =>handleClick(seat)} data-test="seat">
             {seat.name}
         </SeatItem>
     );

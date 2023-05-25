@@ -9,6 +9,10 @@ export default function SessionsPage() {
     const film = idFilme;
     const [cardDay, setCards] = useState(film.days);
     const [infoMovie, setInfoMovie] = useState();
+    const [darkMode, setDarkMode] = useState(() => {
+        return JSON.parse(localStorage.getItem('darkMode')) || false;
+      });
+      console.log("Dark mode em:", darkMode)
 
   useEffect(() => {
     axios.defaults.headers.common["Authorization"] = "Bih7oJ1on6MJflYVuhZlVsqI";
@@ -24,7 +28,7 @@ export default function SessionsPage() {
 
     return (
 
-        <PageContainer>
+        <PageContainer darkMode={darkMode}>
             Selecione o horário
             <div>
             {
@@ -35,13 +39,13 @@ export default function SessionsPage() {
             }
             </div>
 
-            <FooterContainer>
+            <FooterContainer darkMode={darkMode} data-test="footer">
                 <>                
                 {
                     infoMovie 
                     ?  
                     <>
-                        <div>
+                        <div >
                             <img src={infoMovie.data.posterURL} alt="poster" />
                         </div>
                         <div>
@@ -105,7 +109,7 @@ const PageContainer = styled.div`
     font-family: 'Roboto';
     font-size: 24px;
     text-align: center;
-    color: #293845;
+    color: ${props => props.darkMode ? '#000000' : '#293845'};
     margin-top: 30px;
     padding-bottom: 120px;
     padding-top: 70px;
@@ -116,7 +120,7 @@ const PageContainer = styled.div`
 const FooterContainer = styled.div`
     width: 100%;
     height: 120px;
-    background-color: #C3CFD9;
+    background-color: ${props => props.darkMode ? '#212121' : '#C3CFD9'};
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -130,7 +134,7 @@ const FooterContainer = styled.div`
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: white;
+        background-color: ${props => props.darkMode ? '#3c3c3c' : 'white'};;
         margin: 12px;
         img {
             width: 50px;

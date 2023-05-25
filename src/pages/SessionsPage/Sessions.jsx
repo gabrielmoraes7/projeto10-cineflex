@@ -1,18 +1,23 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 export default function Sessions(props) {
     const { cardDay } = props;
+    const [darkMode, setDarkMode] = useState(() => {
+        return JSON.parse(localStorage.getItem('darkMode')) || false;
+      });
+      console.log("Dark mode em:", darkMode)
   
     return (
-      <SessionContainer>
+      <SessionContainer darkMode={darkMode} data-test="movie-day">
         {cardDay.map((card) => (
           <div key={card.id}>
             <h2>{card.weekday} - {card.date}</h2>
-            <ButtonsContainer>
+            <ButtonsContainer darkMode={darkMode}>
               {card.showtimes.map((showtime) => (
                 <Link to={`/assentos/${showtime.id}`} key={showtime.id}>
-                  <button>{showtime.name}</button>
+                  <button data-test="showtime">{showtime.name}</button>
                 </Link>
               ))}
             </ButtonsContainer>
@@ -40,6 +45,6 @@ const SessionContainer = styled.div`
     align-items: flex-start;
     font-family: 'Roboto';
     font-size: 20px;
-    color: #293845;
+    color: ${props => props.darkMode ? '#000000' : '#293845'};
     padding: 0 20px;
 `

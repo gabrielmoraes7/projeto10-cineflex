@@ -6,6 +6,10 @@ import Card from "./Card";
 
 export default function HomePage() {
   const [cards, setCards] = useState([]);
+  const [darkMode, setDarkMode] = useState(() => {
+    return JSON.parse(localStorage.getItem('darkMode')) || false;
+  });
+  console.log("Dark mode em:", darkMode)
 
   useEffect(() => {
     axios.defaults.headers.common["Authorization"] = "Bih7oJ1on6MJflYVuhZlVsqI";
@@ -19,12 +23,12 @@ export default function HomePage() {
   }, []);
 
   return (
-    <PageContainer>
+    <PageContainer darkMode={darkMode}>
       Selecione o filme
       <ListContainer>
         {cards.map((card) => (
             <Link to={`/sessoes/${card.id}`} key={card.id}>
-                <MovieContainer >
+                <MovieContainer data-test="movie">
                     <Card imgURL={card.posterURL} />
                 </MovieContainer>
              </Link>
@@ -41,7 +45,7 @@ const PageContainer = styled.div`
   font-family: "Roboto";
   font-size: 24px;
   text-align: center;
-  color: #293845;
+  color:  ${props => props.darkMode ? '#000000' : '#293845'};
   margin-top: 30px;
   padding-top: 70px;
 `;
