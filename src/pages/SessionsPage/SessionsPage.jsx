@@ -39,25 +39,23 @@ export default function SessionsPage() {
             }
             </div>
 
-            <FooterContainer darkMode={darkMode} >
-                <>                
+            <>              
                 {
                     infoMovie 
                     ?  
-                    <div data-test="footer">
+                    <FooterContainer darkMode={darkMode} data-test="footer" >
                         <div >
                             <img src={infoMovie.data.posterURL} alt="poster" />
                         </div>
                         <div>
                             <p>{infoMovie.data.title}</p>
                         </div>
-                    </ div>
+                    </ FooterContainer>
                     : null
 
                 }
-                </>
                 
-            </FooterContainer>
+            </>
         </PageContainer>    
 
         /** 

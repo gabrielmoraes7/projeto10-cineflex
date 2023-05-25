@@ -13,6 +13,7 @@
         const [seats, setSeats]  = useState([])
         const [selected, setSelected] = useState([])
         const [compradores, setCompradores] = useState([]);
+        const [hour, setHour] = useState([]);
         const [darkMode, setDarkMode] = useState(() => {
             return JSON.parse(localStorage.getItem('darkMode')) || false;
           });
@@ -41,6 +42,7 @@
                 setMovieInfo(res.data.movie)
                 setSeats(res.data.seats)
                 setSessionInfo(res.data.day)
+                setHour(res.data.name)
             });
         }, []);
 
@@ -135,6 +137,7 @@
                           <p>Nome do Comprador {seat.name}:</p>
                           <input
                             name="nome"
+                            type="text"
                             placeholder="Digite seu nome..."
                             value={comprador.nome || ''}
                             onChange={event => handleInputChange(event, index)}
@@ -143,6 +146,7 @@
                           <p>CPF do Comprador {seat.name}:</p>
                           <input
                             name="cpf"
+                            type="number"
                             placeholder="Digite seu CPF..."
                             value={comprador.cpf || ''}
                             onChange={event => handleInputChange(event, index)}
@@ -165,7 +169,7 @@
                     </div>
                     <div>
                         <p>{movieInfo.title}</p>
-                        <p>{sessionInfo.weekday} - {sessionInfo.date}</p>
+                        <p>{sessionInfo.weekday} - {hour}</p>
                     </div>
                 </FooterContainer>
 
