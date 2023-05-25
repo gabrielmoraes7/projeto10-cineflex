@@ -10,9 +10,9 @@ export default function Sessions(props) {
       console.log("Dark mode em:", darkMode)
   
     return (
-      <SessionContainer darkMode={darkMode} data-test="movie-day">
+      <SessionContainer >
         {cardDay.map((card) => (
-          <div key={card.id}>
+          <div key={card.id} darkMode={darkMode} data-test="movie-day">
             <h2>{card.weekday} - {card.date}</h2>
             <ButtonsContainer darkMode={darkMode}>
               {card.showtimes.map((showtime) => (
