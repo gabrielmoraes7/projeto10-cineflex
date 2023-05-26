@@ -1,12 +1,13 @@
     import { useState, useEffect } from "react";
     import styled from "styled-components";
-    import { useParams } from "react-router-dom";
+    import { useParams, useNavigate } from "react-router-dom";
     import axios from "axios";
     import Seat from "./Seat";
     import { Link } from "react-router-dom";
 
 
     export default function SeatsPage() {
+        const navigate = useNavigate();
         const { idSessao } = useParams()
         const [movieInfo, setMovieInfo] = useState([])
         const [sessionInfo, setSessionInfo] = useState([])
@@ -17,7 +18,14 @@
         const [darkMode, setDarkMode] = useState(() => {
             return JSON.parse(localStorage.getItem('darkMode')) || false;
           });
-          console.log("Dark mode em:", darkMode)
+        const [data, setData] = useState([{
+            nameFilme:'',
+            date:'',
+            hour:'',
+            seat:{}, 
+            nameBuyer:'',
+            cpf:''
+        }]);  
           useEffect(() => {
             const handleStorageChange = () => {
               const darkModeValue = JSON.parse(localStorage.getItem('darkMode')) || false;
@@ -31,7 +39,7 @@
             }, []);
         
           
-        console.log(idSessao);
+          
         useEffect(() => {
             axios.defaults.headers.common["Authorization"] = "Bih7oJ1on6MJflYVuhZlVsqI";
             const promise = axios.get(
@@ -43,12 +51,16 @@
                 setSeats(res.data.seats)
                 setSessionInfo(res.data.day)
                 setHour(res.data.name)
-                console.log("mandou!")
+                console.log("recebeu os dados!")
             });
             promise.catch((error) => {
                 console.log(error);
             })
         }, []);
+
+        useEffect(() => {
+          console.log(data);
+         }, [data]);
 
         function handleInputChange(event, index) {
             const { name, value } = event.target;
@@ -65,16 +77,41 @@
           
           function handleSubmit(event) {
             event.preventDefault();
+            const banco = seats.find(seat => seat.id === compradores[0].idAssento);            
+            const name = compradores[0].nome;
+            const cpf = compradores[0].cpf;
             const ids = selected.map(seat => seat.id);
+            const numSeat = selected.map(seat => seat.name);
+            const nameFilme = movieInfo.title;
+            const date = sessionInfo.date;
+            const seat = numSeat;
+
+            const saveData = [nameFilme,
+              date,
+              hour,
+              numSeat,
+              name,
+              cpf
+              ];
+            console.log(saveData);  
+            
+            setData(saveData);
+            
+            
             axios.post('https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many', {
-              ids,
-              compradores: compradores.map(comprador => ({
-                idAssento: comprador.idAssento,
-                nome: comprador.nome,
-                cpf: comprador.cpf
-              }))
+            ids,
+            name,
+            cpf
+            }).then(res => {
+            console.log("mandou")
+            navigate('/sucesso', { state: saveData });
+            })
+            .catch(error => {
+            console.error(error);
             });
-          }
+           }
+           
+           
         
 
         useEffect(() => {
@@ -115,62 +152,31 @@
 
                 <FormContainer onSubmit={handleSubmit} >
                 <form>
-                {
-  compradores.length < 2
-  ?
-  <>
-    <p>Nome do Comprador:</p>
-    <input 
-      name="nome" 
-      placeholder="Digite seu nome..." 
-      value={compradores[0]?.nome || ''}
-      onChange={event => handleInputChange(event, 0)}
-      data-test="client-name"
-    />
+                <p>Nome do Comprador:</p>
+                <input 
+                name="nome" 
+                type="text"
+                placeholder="Digite seu nome..." 
+                value={compradores[0]?.nome || ''}
+                onChange={event => handleInputChange(event, 0)}
+                data-test="client-name"
+                required
+                />
 
-    <p>CPF do Comprador:</p>
-    <input 
-      name="cpf" 
-      placeholder="Digite seu CPF..." 
-      value={compradores[0]?.cpf || ''}
-      onChange={event => handleInputChange(event, 0)}
-      data-test="client-cpf"
-    />
-  </>
-  :
-  compradores.map((comprador, index) => {
-    const seat = seats.find(seat => seat.id === comprador.idAssento);
-    return (
-      <>
-        <p>Nome do Comprador {seat.name}:</p>
-        <input
-          name="nome"
-          type="text"
-          placeholder="Digite seu nome..."
-          value={comprador.nome || ''}
-          onChange={event => handleInputChange(event, index)}
-        />
-        
-        <p>CPF do Comprador {seat.name}:</p>
-        <input
-          name="cpf"
-          type="number"
-          placeholder="Digite seu CPF..."
-          value={comprador.cpf || ''}
-          onChange={event => handleInputChange(event, index)}
-        />
-      </>
-    );
-  })
-}
-
-
-                    
-                    <Link to={`/sucesso`} >
-                    <button type="submit" data-test="book-seat-btn">Reservar Assento(s)</button>
-                    </Link> 
+                <p>CPF do Comprador:</p>
+                <input 
+                name="cpf" 
+                type="number"
+                placeholder="Digite seu CPF..." 
+                value={compradores[0]?.cpf || ''}
+                onChange={event => handleInputChange(event, 0)}
+                data-test="client-cpf"
+                required
+                />
+                <button type="submit" data-test="book-seat-btn">Reservar Assento(s)</button>
                 </form>
                 </FormContainer>
+
 
 
                 <FooterContainer darkMode={darkMode} data-test="footer">

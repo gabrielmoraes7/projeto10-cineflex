@@ -46,9 +46,9 @@ export default function Seat(props) {
         }
     }
     //testando se está selecionando direito
-    useEffect(() => {
+    /** useEffect(() => {
         console.log(selected);
-    }, [selected]);
+    }, [selected]);*/
 
     function handleClick(seat){
         isAvailable()

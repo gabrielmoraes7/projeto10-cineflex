@@ -1,35 +1,49 @@
 import styled from "styled-components"
-import { Link } from "react-router-dom";
+import { useLocation, Link  } from "react-router-dom";
 
 export default function SuccessPage() {
-
-    return (
-        <PageContainer>
-            <h1>Pedido feito <br /> com sucesso!</h1>
-
-            <TextContainer>
-                <strong><p>Filme e sessão</p></strong>
-                <p>Tudo em todo lugar ao mesmo tempo</p>
-                <p>03/03/2023 - 14:00</p>
-            </TextContainer>
-
-            <TextContainer>
-                <strong><p>Ingressos</p></strong>
-                <p>Assento 01</p>
-                <p>Assento 02</p>
-                <p>Assento 03</p>
-            </TextContainer>
-
-            <TextContainer>
-                <strong><p>Comprador</p></strong>
-                <p>Nome: Letícia Chijo</p>
-                <p>CPF: 123.456.789-10</p>
-            </TextContainer>
-            <Link to='/' >
-                <button data-test="go-home-btn">Voltar para Home</button>
-            </Link>
-        </PageContainer>
-    )
+    const location = useLocation();
+    console.log(location.state) 
+    if (location.state) {
+        const { nameFilme, date, hour, seat, nameBuyer, cpf } = location.state;
+        console.log(nameFilme);
+        console.log(date);
+        console.log(hour);
+        console.log(seat);
+        console.log(nameBuyer);
+        console.log(cpf);
+        return (
+            <PageContainer>
+                <h1>Pedido feito <br /> com sucesso!</h1>
+    
+                <TextContainer>
+                    <strong><p>Filme e sessão</p></strong>
+                    <p>{location.state.nameFilme}</p>
+                    <p>{date} - {hour}</p>
+                </TextContainer>
+    
+                <TextContainer>
+                    <strong><p>Ingressos</p></strong>
+                    {seat?seat.map((banco) => (
+                        <p>Assento {banco}</p>
+                    ))
+                    : null}
+                </TextContainer>
+    
+                <TextContainer>
+                    <strong><p>Comprador</p></strong>
+                    <p>Nome: {nameBuyer}</p>
+                    <p>CPF: {cpf}</p>
+                </TextContainer>
+                <Link to='/' >
+                    <button data-test="go-home-btn">Voltar para Home</button>
+                </Link>
+            </PageContainer>
+        )
+        } else {
+        console.log("deu ruim")
+        }
+    
 }
 
 const PageContainer = styled.div`
