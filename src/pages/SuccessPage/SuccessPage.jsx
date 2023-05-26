@@ -5,7 +5,13 @@ export default function SuccessPage() {
     const location = useLocation();
     console.log(location.state) 
     if (location.state) {
-        const { nameFilme, date, hour, seat, nameBuyer, cpf } = location.state;
+        const nameFilme = location.state.nameFilme;
+        const date = location.state.date;
+        const hour = location.state.hour;
+        const seat = location.state.seat;
+        const nameBuyer = location.state.nameBuyer;
+        const cpf = location.state.cpf;
+        
         console.log(nameFilme);
         console.log(date);
         console.log(hour);
@@ -16,13 +22,13 @@ export default function SuccessPage() {
             <PageContainer>
                 <h1>Pedido feito <br /> com sucesso!</h1>
     
-                <TextContainer>
+                <TextContainer data-test="movie-info">
                     <strong><p>Filme e sessão</p></strong>
                     <p>{location.state.nameFilme}</p>
                     <p>{date} - {hour}</p>
                 </TextContainer>
     
-                <TextContainer>
+                <TextContainer data-test="seats-info">
                     <strong><p>Ingressos</p></strong>
                     {seat?seat.map((banco) => (
                         <p>Assento {banco}</p>
@@ -30,7 +36,7 @@ export default function SuccessPage() {
                     : null}
                 </TextContainer>
     
-                <TextContainer>
+                <TextContainer data-test="client-info">
                     <strong><p>Comprador</p></strong>
                     <p>Nome: {nameBuyer}</p>
                     <p>CPF: {cpf}</p>
