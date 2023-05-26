@@ -43,7 +43,11 @@
                 setSeats(res.data.seats)
                 setSessionInfo(res.data.day)
                 setHour(res.data.name)
+                console.log("mandou!")
             });
+            promise.catch((error) => {
+                console.log(error);
+            })
         }, []);
 
         function handleInputChange(event, index) {
