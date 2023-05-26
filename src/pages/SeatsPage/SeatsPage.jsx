@@ -111,54 +111,56 @@
 
                 <FormContainer onSubmit={handleSubmit} >
                 <form>
-                    {
-                    compradores.length < 2
-                    ?
-                    <>
-                        <p>Nome do Comprador:</p>   
-                        <input 
-                            name="nome" 
-                            placeholder="Digite seu nome..." 
-                            value={compradores.nome || ''}
-                            onChange={event => handleInputChange(event, 0)}
-                            data-test="client-name"
-                        />
+                {
+  compradores.length < 2
+  ?
+  <>
+    <p>Nome do Comprador:</p>
+    <input 
+      name="nome" 
+      placeholder="Digite seu nome..." 
+      value={compradores[0]?.nome || ''}
+      onChange={event => handleInputChange(event, 0)}
+      data-test="client-name"
+    />
 
-                        <p>CPF do Comprador:</p>
-                        <input 
-                            name="cpf" 
-                            placeholder="Digite seu CPF..." 
-                            value={compradores.cpf || ''}
-                            onChange={event => handleInputChange(event, index)}
-                            data-test="client-cpf"
-                        />
-                    </>
-                    :
-                    compradores.map((comprador, index) => {
-                      const seat = seats.find(seat => seat.id === comprador.idAssento);
-                      return (
-                        <>
-                          <p>Nome do Comprador {seat.name}:</p>
-                          <input
-                            name="nome"
-                            type="text"
-                            placeholder="Digite seu nome..."
-                            value={comprador.nome || ''}
-                            onChange={event => handleInputChange(event, index)}
-                          />
-                          
-                          <p>CPF do Comprador {seat.name}:</p>
-                          <input
-                            name="cpf"
-                            type="number"
-                            placeholder="Digite seu CPF..."
-                            value={comprador.cpf || ''}
-                            onChange={event => handleInputChange(event, index)}
-                          />
-                        </>
-                      );
-                    })
-                  }
+    <p>CPF do Comprador:</p>
+    <input 
+      name="cpf" 
+      placeholder="Digite seu CPF..." 
+      value={compradores[0]?.cpf || ''}
+      onChange={event => handleInputChange(event, 0)}
+      data-test="client-cpf"
+    />
+  </>
+  :
+  compradores.map((comprador, index) => {
+    const seat = seats.find(seat => seat.id === comprador.idAssento);
+    return (
+      <>
+        <p>Nome do Comprador {seat.name}:</p>
+        <input
+          name="nome"
+          type="text"
+          placeholder="Digite seu nome..."
+          value={comprador.nome || ''}
+          onChange={event => handleInputChange(event, index)}
+        />
+        
+        <p>CPF do Comprador {seat.name}:</p>
+        <input
+          name="cpf"
+          type="number"
+          placeholder="Digite seu CPF..."
+          value={comprador.cpf || ''}
+          onChange={event => handleInputChange(event, index)}
+        />
+      </>
+    );
+  })
+}
+
+
                     
                     <Link to={`/sucesso`} >
                     <button type="submit" data-test="book-seat-btn">Reservar Assento(s)</button>
