@@ -50,7 +50,11 @@
             const { name, value } = event.target;
             setCompradores(compradores => {
               const newCompradores = [...compradores];
-              newCompradores[index] = { ...newCompradores[index], [name]: value };
+              if (index === undefined) {
+                newCompradores[0] = { ...newCompradores[0], [name]: value };
+              } else {
+                newCompradores[index] = { ...newCompradores[index], [name]: value };
+              }
               return newCompradores;
             });
           }
@@ -111,12 +115,12 @@
                     compradores.length < 2
                     ?
                     <>
-                        <p>Nome do Comprador:</p>
+                        <p>Nome do Comprador:</p>   
                         <input 
                             name="nome" 
                             placeholder="Digite seu nome..." 
                             value={compradores.nome || ''}
-                            onChange={event => handleInputChange(event, index)}
+                            onChange={event => handleInputChange(event, 0)}
                             data-test="client-name"
                         />
 
