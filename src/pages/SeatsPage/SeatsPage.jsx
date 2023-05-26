@@ -86,17 +86,16 @@
             const date = sessionInfo.date;
             const seat = numSeat;
 
-            const saveData = [nameFilme,
-              date,
-              hour,
-              numSeat,
-              name,
-              cpf
-              ];
-            console.log(saveData);  
+            const data = {
+              nameFilme: movieInfo.title,
+              date: sessionInfo.date,
+              hour: hour,
+              seat: numSeat,
+              nameBuyer: compradores[0].nome,
+              cpf: compradores[0].cpf
+            };
             
-            setData(saveData);
-            
+            console.log(data);
             
             axios.post('https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many', {
             ids,
@@ -104,7 +103,8 @@
             cpf
             }).then(res => {
             console.log("mandou")
-            navigate('/sucesso', { state: saveData });
+            navigate('/sucesso', { state: data });
+            console.log(data)
             })
             .catch(error => {
             console.error(error);
